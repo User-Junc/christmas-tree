@@ -785,7 +785,9 @@
         if (result.landmarks && result.landmarks.length > 0) {
           STATE.hand.detected = true
           const lm = result.landmarks[0]
-          STATE.hand.x = (lm[9].x - 0.5) * 2
+          
+          // 修复：取反X轴方向，使手向右移动时粒子向右旋转
+          STATE.hand.x = -(lm[9].x - 0.5) * 2  // 添加负号
           STATE.hand.y = (lm[9].y - 0.5) * 2
 
           const thumb = lm[4]
@@ -868,7 +870,8 @@
 
         // Rotation Logic
         if (STATE.mode === 'SCATTER' && STATE.hand.detected) {
-          const targetRotY = STATE.hand.x * Math.PI * 0.9
+          // 修复：取反X轴方向，使手向右移动时粒子向右旋转
+          const targetRotY = -STATE.hand.x * Math.PI * 0.9  // 添加负号
           const targetRotX = STATE.hand.y * Math.PI * 0.25
           STATE.rotation.y += (targetRotY - STATE.rotation.y) * 3.0 * dt
           STATE.rotation.x += (targetRotX - STATE.rotation.x) * 3.0 * dt
